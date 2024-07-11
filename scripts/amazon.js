@@ -1,6 +1,17 @@
 let productHTML = "";
+if (!Array.isArray(products)) {
+  console.error("products is not an array or is not defined properly");
+  // return;
+}
 
-products.forEach((product) => {
+if (!products) {
+  console.log("This product is not found");
+  // return;
+}
+
+products.forEach((product, index) => {
+  console.log(`Processing product at index ${index}:`, product);
+
   const html = `
 	<div class="product-container">
     <div class="product-image-container">
@@ -46,7 +57,7 @@ products.forEach((product) => {
       Added
     </div>
 
-    <button class="add-to-cart-button button-primary">
+    <button class="add-to-cart-button button-primary " data-product-id ="${product.id}">
       Add to Cart
     </button>
   </div>
@@ -54,9 +65,38 @@ products.forEach((product) => {
   productHTML += html;
 });
 
-// console.log(productHTML);
 const productGrid = document.querySelector(".products-grid");
+if (!productGrid) {
+  console.error("Could not find element with class 'products-grid'");
+  // return;
+}
 productGrid.innerHTML = productHTML;
-// console.log(proGrid);
 
-// productsGrid.innerHtml = 'Hello';
+const addToCartButtons = document.querySelectorAll(".add-to-cart-button");
+if (addToCartButtons.length === 0) {
+  console.error("No elements found with class 'added-to-cart'");
+  // return;
+}
+addToCartButtons.forEach((addToCartBtn, index) => {
+  // console.log(`Attaching event listener to button at index ${index}`);
+  addToCartBtn.addEventListener("click", () => {
+    const productID = addToCartBtn.dataset.productId;
+
+    let matchingItem;
+
+    cart.forEach((item) => {
+      if (productID === item.productId) {
+        matchingItem = item;
+      }
+    });
+    if (matchingItem) {
+      matchingItem.quantity += 1;
+    } else {
+      cart.push({
+        productId: productID,
+        quantity: 1
+      });
+    }
+    console.log(cart);
+  });
+});
